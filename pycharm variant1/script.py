@@ -32,7 +32,8 @@ password=""
 def open_driver():
     global driver
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
+    #options.add_argument("--headless")
+    options.add_argument("--headless=old")
     options.add_argument("user-agent=User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36")
     driver = webdriver.Chrome(options=options)
     driver.get("https://web.whatsapp.com/")
@@ -72,7 +73,12 @@ def get_mess():
         messages_in=container_mess.find_elements(by=By.CLASS_NAME,value="message-in")
         messages=[]
         for mes in messages_in:
-            messages.append(mes.find_element(by=By.CLASS_NAME, value="_akbu"))
+            try:
+                elem=mes.find_element(by=By.CLASS_NAME, value="_akbu")
+                messages.append(elem)
+            except:
+                pass
+                
         messages=messages[-j:]
         flag_nal=False
         for k in range(len(buffer)):
@@ -80,8 +86,8 @@ def get_mess():
                 flag_nal=True
                 for mess in messages:
                     buffer[k]["mess"]+=mess.text+' / '
-                log_message(f"< -- {datetime.now()} --> // Новое сообщение от {buffer[k]["name"]} //")
-                log_message(f"< -- {datetime.now()} --> // Буфер сообщений {buffer[k]["mess"]} //")
+                log_message(f"< -- {datetime.now()} --> // Новое сообщение от {buffer[k]['name']} //")
+                log_message(f"< -- {datetime.now()} --> // Буфер сообщений {buffer[k]['mess']} //")
                 buffer[k]["time"]=int(spin.get())
                 last_message=messages[-1].text
                 last_id=names[i].text
@@ -93,8 +99,8 @@ def get_mess():
             for mess in messages:
                 slovar["mess"]+=mess.text+' / '
             slovar["time"]=int(spin.get())
-            log_message(f"< -- {datetime.now()} --> // Сообщение от {slovar["name"]} //")
-            log_message(f"< -- {datetime.now()} --> // Сообщение {slovar["mess"]} //")
+            log_message(f"< -- {datetime.now()} --> // Сообщение от {slovar['name']} //")
+            log_message(f"< -- {datetime.now()} --> // Сообщение {slovar['mess']} //")
             last_message=messages[-1].text
             last_id=names[i].text
             buffer.append(slovar)
@@ -107,7 +113,11 @@ def last_mess():
         messages_in=container_mess.find_elements(by=By.CLASS_NAME,value="message-in")
         messages=[]
         for mes in messages_in:
-            messages.append(mes.find_element(by=By.CLASS_NAME, value="_akbu"))
+            try:
+                elem=mes.find_element(by=By.CLASS_NAME, value="_akbu")
+                messages.append(elem)
+            except:
+                pass
         if messages[-1].text!=last_message:
             for l in range(len(messages)-1,0,-1):
                 if messages[l].text!=last_message:
@@ -139,8 +149,8 @@ def time_monitor():
         if buffer[i]["time"]<=0:
             del_index.append(i)
             create_lid(buffer[i]["name"],buffer[i]["mess"])
-            log_message(f"< -- {datetime.now()} --> // Создание лида от {buffer[i]["name"]} //")
-            log_message(f"< -- {datetime.now()} --> // Сообщение {buffer[i]["mess"]} //")
+            log_message(f"< -- {datetime.now()} --> // Создание лида от {buffer[i]['name']} //")
+            log_message(f"< -- {datetime.now()} --> // Сообщение {buffer[i]['mess']} //")
     del_index.sort()
     i=len(del_index)-1
     while(i>=0):

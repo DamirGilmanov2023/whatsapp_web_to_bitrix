@@ -64,7 +64,12 @@ def get_mess():
         messages_in=container_mess.find_elements(by=By.CLASS_NAME,value="message-in")
         messages=[]
         for mes in messages_in:
-            messages.append(mes.find_element(by=By.CLASS_NAME, value="_akbu"))
+            try:
+                elem=mes.find_element(by=By.CLASS_NAME, value="_akbu")
+                messages.append(elem)
+            except:
+                pass
+                
         messages=messages[-j:]
         flag_nal=False
         for k in range(len(buffer)):
@@ -99,7 +104,12 @@ def last_mess():
         messages_in=container_mess.find_elements(by=By.CLASS_NAME,value="message-in")
         messages=[]
         for mes in messages_in:
-            messages.append(mes.find_element(by=By.CLASS_NAME, value="_akbu"))
+            try:
+                elem=mes.find_element(by=By.CLASS_NAME, value="_akbu")
+                messages.append(elem)
+            except:
+                pass
+                
         if messages[-1].text!=last_message:
             for l in range(len(messages)-1,0,-1):
                 if messages[l].text!=last_message:
@@ -139,7 +149,7 @@ def time_monitor():
         i-=1
 
 def create_lid(name,mess):
-    requests.post(f'https://ekopromkz.bitrix24.kz/rest/1/{"секретный ключ"}/crm.lead.add.json?', params={'fields[NAME]': name, 'fields[TITLE]': mess})
+    requests.post('https://ekopromkz.bitrix24.kz/rest/1/xprtif1sj6th7rxw/crm.lead.add.json?', params={'fields[NAME]': name, 'fields[TITLE]': mess})
 
 def working():
     global flag_work,img,to_work
